@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #container {
+        display: flex;
+        width: 98vw;
+      }
+      #login_form {
+        margin: 0 auto;
+      }
+      form {
+        width: 20%;
+      }
+      input,
+      button {
+        height: 45px;
+        width: 200px;
+        margin-top: 5%;
+      }
+      button {
+        margin-top: 1%;
+        background-color: red;
+        color: black;
+        outline: none;
+        border: none;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div id="login_form">
+        <h1>Login</h1>
+        <form action="">
+          <input type="text" placeholder="Email" id="log_username" />
+          <input type="text" placeholder="Password" id="log_pass" />
+        </form>
+        <button onclick="Login()">Login</button>
+      </div>
+    </div>
+  </body>
+  <script>
+    async function Login() {
+      let url = `https://masai-api-mocker.herokuapp.com/auth/login`;
+      let login_data = {
+        username: document.getElementById("log_username").value,
+        password: document.getElementById("log_pass").value,
+      };
+      login_data = JSON.stringify(login_data);
+      let res = await fetch(url, {
+        method: "POST",
+        body: login_data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      let data = await res.json();
+      if (data.error == false) {
+        getProfile(document.getElementById("log_username").value, data.token);
+        alert("Login Sucessfull");
+        window.location.href = "index.html";
+      } else {
+        alert("Wrong Crenditials!");
+      }
+      console.log(data);
+    }
+
+    async function getProfile(username, token) {
+      console.log(token);
+      let url = `https://masai-api-mocker.herokuapp.com/user/${username}`;
+      let res = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      let data = await res.json();
+      console.log(data);
+    }
+  </script>
+</html>

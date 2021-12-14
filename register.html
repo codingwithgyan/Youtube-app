@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #container {
+        width: 98vw;
+      }
+      #register_form {
+        margin: auto;
+      }
+      form {
+        width: 20%;
+      }
+      input,
+      button {
+        height: 45px;
+        width: 200px;
+        margin-top: 5%;
+      }
+      button {
+        margin-top: 1%;
+        background-color: red;
+        color: black;
+        outline: none;
+        border: none;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div id="register_form">
+        <h1>Register</h1>
+        <form action="">
+          <input type="text" id="name" placeholder="Name" />
+          <input type="text" id="email" placeholder="Email" />
+          <input type="text" id="pass" placeholder="password" />
+          <input type="text" id="username" placeholder="Username" />
+          <input type="text" id="mobile" placeholder="Mobile" />
+          <input type="text" id="desc" placeholder="Description" />
+        </form>
+        <button onclick="Register()">Signup</button>
+      </div>
+    </div>
+  </body>
+  <script>
+    async function Register() {
+      var signup_data = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("pass").value,
+        username: document.getElementById("username").value,
+        mobile: document.getElementById("mobile").value,
+        description: document.getElementById("desc").value,
+      };
+      signup_data = JSON.stringify(signup_data);
+      console.log(signup_data);
+
+      let url = "https://masai-api-mocker.herokuapp.com/auth/register";
+      let res = await fetch(url, {
+        method: "POST",
+        body: signup_data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      let data = await res.json();
+      if (data.error == false) {
+        alert("Registration succesfull");
+        
+        window.location.href = "login.html";
+      } else {
+        alert("Registration failed");
+      }
+      console.log(data);
+    }
+  </script>
+</html>
